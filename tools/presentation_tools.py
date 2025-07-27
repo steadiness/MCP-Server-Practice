@@ -11,7 +11,7 @@ import utils as ppt_utils
 def register_presentation_tools(app: FastMCP, presentations: Dict, get_current_presentation_id, get_template_search_directories):
     """Register presentation management tools with the FastMCP app"""
     
-    @app.tool()
+    @app.tool(description="새로운 프젠젠테이션을 생성합니다.")
     def create_presentation(id: Optional[str] = None) -> Dict:
         """Create a new PowerPoint presentation."""
         # Create a new presentation
@@ -31,7 +31,7 @@ def register_presentation_tools(app: FastMCP, presentations: Dict, get_current_p
             "slide_count": len(pres.slides)
         }
 
-    @app.tool()
+    @app.tool(description="템플릿을 사용하여 새로운 프젠젠테이션을 생성합니다.")
     def create_presentation_from_template(template_path: str, id: Optional[str] = None) -> Dict:
         """Create a new PowerPoint presentation from a template file."""
         # Check if template file exists
@@ -74,7 +74,7 @@ def register_presentation_tools(app: FastMCP, presentations: Dict, get_current_p
             "layout_count": len(pres.slide_layouts)
         }
 
-    @app.tool()
+    @app.tool(description="기존 프젠젠테이션을 엽니다.")
     def open_presentation(file_path: str, id: Optional[str] = None) -> Dict:
         """Open an existing PowerPoint presentation from a file."""
         # Check if file exists
@@ -104,7 +104,7 @@ def register_presentation_tools(app: FastMCP, presentations: Dict, get_current_p
             "slide_count": len(pres.slides)
         }
 
-    @app.tool()
+    @app.tool(description="프젠젠테이션을 저장합니다.")
     def save_presentation(file_path: str, presentation_id: Optional[str] = None) -> Dict:
         """Save a presentation to a file."""
         # Use the specified presentation or the current one
@@ -127,7 +127,7 @@ def register_presentation_tools(app: FastMCP, presentations: Dict, get_current_p
                 "error": f"Failed to save presentation: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="프젠젠테이션의 정보를 가져옵니다.")
     def get_presentation_info(presentation_id: Optional[str] = None) -> Dict:
         """Get information about a presentation."""
         pres_id = presentation_id if presentation_id is not None else get_current_presentation_id()
@@ -148,7 +148,7 @@ def register_presentation_tools(app: FastMCP, presentations: Dict, get_current_p
                 "error": f"Failed to get presentation info: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="템플릿 파일의 정보를 가져옵니다.")
     def get_template_file_info(template_path: str) -> Dict:
         """Get information about a template file including layouts and properties."""
         # Check if template file exists
@@ -174,7 +174,7 @@ def register_presentation_tools(app: FastMCP, presentations: Dict, get_current_p
                 "error": f"Failed to get template info: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="프젠젠테이션의 코어 속성을 설정합니다.")
     def set_core_properties(
         title: Optional[str] = None,
         subject: Optional[str] = None,

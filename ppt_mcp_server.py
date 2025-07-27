@@ -330,7 +330,7 @@ register_transition_tools(
 
 # ---- Additional Utility Tools ----
 
-@app.tool()
+@app.tool(description="현재 로드된 프젠젠테이션 목록을 가져옵니다.")
 def list_presentations() -> Dict:
     """List all loaded presentations."""
     return {
@@ -346,7 +346,7 @@ def list_presentations() -> Dict:
         "total_presentations": len(presentations)
     }
 
-@app.tool()
+@app.tool(description="프젠젠테이션을 전환합니다.")
 def switch_presentation(presentation_id: str) -> Dict:
     """Switch to a different loaded presentation."""
     if presentation_id not in presentations:
@@ -364,7 +364,7 @@ def switch_presentation(presentation_id: str) -> Dict:
         "current_presentation_id": current_presentation_id
     }
 
-@app.tool()
+@app.tool(description="MCP 서버의 정보를 가져옵니다.")
 def get_server_info() -> Dict:
     """Get information about the MCP server."""
     return {

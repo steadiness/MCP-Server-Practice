@@ -9,7 +9,7 @@ def register_hyperlink_tools(app, presentations, get_current_presentation_id, va
                           is_positive, is_non_negative, is_in_range, is_valid_rgb):
     """Register hyperlink management tools with the FastMCP app."""
     
-    @app.tool()
+    @app.tool(description="하이퍼링크 관리 도구입니다.")
     def manage_hyperlinks(
         operation: str,
         slide_index: int,

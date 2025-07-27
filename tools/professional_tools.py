@@ -10,7 +10,7 @@ import utils as ppt_utils
 def register_professional_tools(app: FastMCP, presentations: Dict, get_current_presentation_id):
     """Register professional design tools with the FastMCP app"""
     
-    @app.tool()
+    @app.tool(description="전문가 디자인 도구입니다.")
     def apply_professional_design(
         operation: str,  # "professional_slide", "theme", "enhance", "get_schemes"
         slide_index: Optional[int] = None,
@@ -116,7 +116,7 @@ def register_professional_tools(app: FastMCP, presentations: Dict, get_current_p
                 "error": f"Failed to apply professional design: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="이미지 효과를 적용합니다.")
     def apply_picture_effects(
         slide_index: int,
         shape_index: int,
@@ -244,7 +244,7 @@ def register_professional_tools(app: FastMCP, presentations: Dict, get_current_p
                 "error": f"Failed to apply picture effects: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="폰트 관리 도구입니다.")
     def manage_fonts(
         operation: str,  # "analyze", "optimize", "recommend"
         font_path: str,

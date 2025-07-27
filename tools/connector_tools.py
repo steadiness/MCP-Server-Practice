@@ -12,7 +12,7 @@ def register_connector_tools(app, presentations, get_current_presentation_id, va
                           is_positive, is_non_negative, is_in_range, is_valid_rgb):
     """Register connector tools with the FastMCP app."""
     
-    @app.tool()
+    @app.tool(description="커넥터 선을 추가합니다.")
     def add_connector(
         slide_index: int,
         connector_type: str,

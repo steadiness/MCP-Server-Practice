@@ -13,7 +13,7 @@ import os
 def register_content_tools(app: FastMCP, presentations: Dict, get_current_presentation_id, validate_parameters, is_positive, is_non_negative, is_in_range, is_valid_rgb):
     """Register content management tools with the FastMCP app"""
     
-    @app.tool()
+    @app.tool(description="새로운 슬라이드를 추가합니다.")
     def add_slide(
         layout_index: int = 1,
         title: Optional[str] = None,
@@ -68,7 +68,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to add slide: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="특정 슬라이드의 정보를 가져옵니다.")
     def get_slide_info(slide_index: int, presentation_id: Optional[str] = None) -> Dict:
         """Get information about a specific slide."""
         pres_id = presentation_id if presentation_id is not None else get_current_presentation_id()
@@ -94,7 +94,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to get slide info: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="특정 슬라이드의 텍스트 내용을 추출합니다.")
     def extract_slide_text(slide_index: int, presentation_id: Optional[str] = None) -> Dict:
         """Extract all text content from a specific slide."""
         pres_id = presentation_id if presentation_id is not None else get_current_presentation_id()
@@ -122,7 +122,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to extract slide text: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="프젠젠테이션의 모든 텍스트 내용을 추출합니다.")
     def extract_presentation_text(presentation_id: Optional[str] = None, include_slide_info: bool = True) -> Dict:
         """Extract all text content from all slides in the presentation."""
         pres_id = presentation_id if presentation_id is not None else get_current_presentation_id()
@@ -195,7 +195,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to extract presentation text: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="특정 슬라이드의 플레이스홀더를 채웁니다.")
     def populate_placeholder(
         slide_index: int,
         placeholder_idx: int,
@@ -229,7 +229,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to populate placeholder: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="특정 슬라이드의 플레이스홀더에 버튼 포인트를 추가합니다.")
     def add_bullet_points(
         slide_index: int,
         placeholder_idx: int,
@@ -264,7 +264,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to add bullet points: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="텍스트 관리 도구입니다.")
     def manage_text(
         slide_index: int,
         operation: str,  # "add", "format", "validate", "format_runs"
@@ -471,7 +471,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
                 "error": f"Failed to {operation} text: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="이미지 관리 도구입니다.")
     def manage_image(
         slide_index: int,
         operation: str,  # "add", "enhance"

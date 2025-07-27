@@ -9,7 +9,7 @@ def register_master_tools(app, presentations, get_current_presentation_id, valid
                           is_positive, is_non_negative, is_in_range, is_valid_rgb):
     """Register slide master management tools with the FastMCP app."""
     
-    @app.tool()
+    @app.tool(description="슬라이드 마스터 관리 도구입니다.")
     def manage_slide_masters(
         operation: str,
         master_index: int = 0,

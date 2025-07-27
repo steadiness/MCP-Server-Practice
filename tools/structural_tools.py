@@ -10,7 +10,7 @@ import utils as ppt_utils
 def register_structural_tools(app: FastMCP, presentations: Dict, get_current_presentation_id, validate_parameters, is_positive, is_non_negative, is_in_range, is_valid_rgb, add_shape_direct):
     """Register structural element tools with the FastMCP app"""
     
-    @app.tool()
+    @app.tool(description="테이블을 추가합니다.")
     def add_table(
         slide_index: int,
         rows: int,
@@ -123,7 +123,7 @@ def register_structural_tools(app: FastMCP, presentations: Dict, get_current_pre
                 "error": f"Failed to add table: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="테이블 셀을 포맷합니다.")
     def format_table_cell(
         slide_index: int,
         shape_index: int,
@@ -203,7 +203,7 @@ def register_structural_tools(app: FastMCP, presentations: Dict, get_current_pre
                 "error": f"Failed to format table cell: {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="자동 도형을 추가합니다.")
     def add_shape(
         slide_index: int,
         shape_type: str,
@@ -272,7 +272,7 @@ def register_structural_tools(app: FastMCP, presentations: Dict, get_current_pre
                 "error": f"Failed to add shape '{shape_type}': {str(e)}"
             }
 
-    @app.tool()
+    @app.tool(description="차트를 추가합니다.")
     def add_chart(
         slide_index: int,
         chart_type: str,

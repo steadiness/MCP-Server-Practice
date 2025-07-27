@@ -9,7 +9,7 @@ def register_transition_tools(app, presentations, get_current_presentation_id, v
                           is_positive, is_non_negative, is_in_range, is_valid_rgb):
     """Register slide transition management tools with the FastMCP app."""
     
-    @app.tool()
+    @app.tool(description="슬라이드 트랜지션을 관리합니다.")
     def manage_slide_transitions(
         slide_index: int,
         operation: str,

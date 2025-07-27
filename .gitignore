@@ -12,3 +12,7 @@ wheels/
 test/
 .DS_Store
 CLAUDE.md
+
+#ignore all files in the tools folder
+mcp-config.json
+templates/
