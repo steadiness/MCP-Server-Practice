@@ -4,6 +4,7 @@ Handles slides, text, images, and content manipulation.
 """
 from typing import Dict, List, Optional, Any, Union
 from mcp.server.fastmcp import FastMCP
+from pptx.util import Pt
 import utils as ppt_utils
 import tempfile
 import base64
@@ -221,6 +222,7 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
         
         try:
             ppt_utils.populate_placeholder(slide, placeholder_idx, text)
+            
             return {
                 "message": f"Populated placeholder {placeholder_idx} on slide {slide_index}"
             }
@@ -228,6 +230,110 @@ def register_content_tools(app: FastMCP, presentations: Dict, get_current_presen
             return {
                 "error": f"Failed to populate placeholder: {str(e)}"
             }
+
+    @app.tool(description="플레이스홀더에 텍스트와 폰트 크기를 강제로 설정합니다.")
+    def force_set_placeholder_text(
+        slide_index: int,
+        placeholder_idx: int,
+        text: str,
+        font_size: int,
+        presentation_id: Optional[str] = None
+    ) -> Dict:
+        """Force set placeholder text with font size using direct XML manipulation."""
+        pres_id = presentation_id if presentation_id is not None else get_current_presentation_id()
+        
+        if pres_id is None or pres_id not in presentations:
+            return {
+                "error": "No presentation is currently loaded or the specified ID is invalid"
+            }
+        
+        pres = presentations[pres_id]
+        
+        if slide_index < 0 or slide_index >= len(pres.slides):
+            return {
+                "error": f"Invalid slide index: {slide_index}. Available slides: 0-{len(pres.slides) - 1}"
+            }
+        
+        slide = pres.slides[slide_index]
+        
+        try:
+            shape = slide.placeholders[placeholder_idx]
+            
+            # Method 1: Direct text frame manipulation
+            if hasattr(shape, 'text_frame') and shape.text_frame:
+                # Clear everything
+                shape.text_frame.clear()
+                
+                # Add new paragraph
+                paragraph = shape.text_frame.add_paragraph()
+                run = paragraph.add_run()
+                run.text = text
+                
+                # Force set font size
+                run.font.size = Pt(font_size)
+                
+                # Also try to set it at paragraph level
+                paragraph.font.size = Pt(font_size)
+                
+            else:
+                # Method 2: Use shape.text and then force font
+                shape.text = text
+                
+                # Try to access text frame after setting text
+                if hasattr(shape, 'text_frame') and shape.text_frame:
+                    for paragraph in shape.text_frame.paragraphs:
+                        paragraph.font.size = Pt(font_size)
+                        for run in paragraph.runs:
+                            run.font.size = Pt(font_size)
+
+            return {
+                "message": f"Forced set placeholder {placeholder_idx} on slide {slide_index} with text and font_size={font_size}"
+            }
+        except Exception as e:
+            return {
+                "error": f"Failed to force set placeholder text: {str(e)}"
+            }
+
+    @app.tool(description="모든 슬라이드의 텍스트 글자 크기를 일괄 조정합니다.")
+    def adjust_all_font_sizes(
+        font_size: int,
+        presentation_id: str = None
+    ) -> Dict:
+        """
+        Adjust font size for all text-containing shapes in all slides.
+        
+        Args:
+            font_size: Font size to apply (e.g., 24)
+            presentation_id: Optional presentation ID. If not given, uses current one.
+        
+        Returns:
+            A dict with total updated shapes count
+        """
+        try:
+            pres_id = presentation_id or get_current_presentation_id()
+            if pres_id not in presentations:
+                return {"error": f"Presentation ID '{pres_id}' not found."}
+            
+            pres = presentations[pres_id]
+            updated_shapes = 0
+            
+            for slide in pres.slides:
+                for shape in slide.shapes:
+                    if not hasattr(shape, "text_frame") or not shape.text_frame:
+                        continue
+                    for paragraph in shape.text_frame.paragraphs:
+                        for run in paragraph.runs:
+                            run.font.size = font_size
+                            updated_shapes += 1
+            
+            return {
+                "message": f"{updated_shapes} 텍스트 조각의 글꼴 크기를 {font_size}pt로 변경했습니다.",
+                "font_size": font_size,
+                "updated_count": updated_shapes
+            }
+        
+        except Exception as e:
+            return {"error": f"글꼴 크기 조정 중 오류 발생: {str(e)}"}
 
     @app.tool(description="특정 슬라이드의 플레이스홀더에 버튼 포인트를 추가합니다.")
     def add_bullet_points(
